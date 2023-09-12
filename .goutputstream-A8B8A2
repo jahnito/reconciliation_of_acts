@@ -1,8 +1,3 @@
-'''
-Для работы требуется установка библиотеки thefuzz
-
-pip install thefuzz
-'''
 import csv
 import os
 from pprint import pprint
@@ -63,7 +58,7 @@ def reconciliation_full(akt: dict, order: dict):
         for line in akt[tp]:
             a = set(order.get(tp))
             b = set(full_data.get(tp))
-
+            
             diff_order_lines = list(a - b)
             # print(len(diff_order_lines), len(b))
             comp_lines = reconciliation_obj(line, diff_order_lines)
@@ -91,7 +86,7 @@ def calc_sum_akt(akt: dict, tarifs=None):
                 '100': 17700, '200': 20000, '300': 22200,
                 '1000': 22831
                 }
-
+    
     result = 0
 
     for i in sorted(akt.keys(), key=lambda x: int(x)):
@@ -99,16 +94,23 @@ def calc_sum_akt(akt: dict, tarifs=None):
         s = tarifs[i] * c
         result += round(s, 2)
         print(f'{i} * {c} = {s}')
-
+    
     print(result)
-
+    
     return result
 
 
 if __name__ == '__main__':
     akt = data_obj('akt.csv')
     order = data_obj('order.csv')
-    # Сверяем данные заказа с актом
+
     all_data = reconciliation_full(akt, order)
-    # Выводим суммы сверенных данных
     calc_sum_akt(all_data[0])
+
+    # pprint(all_data[0])
+
+    # print('*' * 150)
+
+    # print('*' * 150)
+
+    # pprint(all_data[1])
