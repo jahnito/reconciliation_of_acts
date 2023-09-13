@@ -52,11 +52,18 @@ def reconciliation_obj(src_1_line: str, src_2_list: list):
     return result
 
 
-def reconciliation_full(akt: dict, order: dict):
+def reconciliation_full(akt: dict, order: dict) -> tuple:
+    '''
+    Функция осуществляет построчную сверку объектов из акта с объектами из заявки 
+    Возвращает кортеж с валидным и не валидным словарём содрежащем потарифные списки объектов
+
+    '''
     if check_tps(akt, order):
         print('Тарифы совпадают можем продолжать')
 
+    # Словарь для валидных(сверенных) объектов
     full_data = {i:[] for i in akt.keys()}
+    # Словарь для не найденных объектов
     not_matching = {i:[] for i in akt.keys()}
 
     for tp in sorted(akt.keys(), key=lambda x: int(x)):
@@ -70,11 +77,13 @@ def reconciliation_full(akt: dict, order: dict):
             if 95 <= comp_lines[0][0] <= 100:
                 full_data[tp].append(comp_lines[0][1])
             else:
-                print('Базовая строка\n', line)
-                print('похожие варианты')
+                print('По тарифу {} сверено объектов {}, осталось {}'.format(tp, len(b), len(diff_order_lines)))
+                print('Базовая строка: ', line)
                 print('id - %  - объект')
                 for id, line_ in enumerate(comp_lines):
-                    print('{} - {} - {}'.format(id, *line_))
+                    if line_[0] > 70:
+                        
+                        print('{} - {} - {}'.format(id, *line_))
                 check = input('Введите номер наиболее подходящего объекта\nили любую букву если нет подходящего варианта: ')
                 if check.isdigit() and int(check) <= len(comp_lines):
                     full_data[tp].append(comp_lines[int(check)][1])
