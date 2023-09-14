@@ -36,7 +36,7 @@ def replacer(line: str, repl: str) -> dict:
 
 def check_tps(src_1: dict, src_2: dict):
     '''
-    Проверка соответсвия тарифов
+    Проверка соответствия тарифов в обоих источниках
     '''
     return sorted(src_1.keys(), key=lambda x: int(x)) == sorted(src_2.keys(), key=lambda x: int(x))
 
@@ -70,9 +70,7 @@ def reconciliation_full(akt: dict, order: dict) -> tuple:
         for line in akt[tp]:
             a = set(order.get(tp))
             b = set(full_data.get(tp))
-
             diff_order_lines = list(a - b)
-            # print(len(diff_order_lines), len(b))
             comp_lines = reconciliation_obj(line, diff_order_lines)
             if 95 <= comp_lines[0][0] <= 100:
                 full_data[tp].append(comp_lines[0][1])
@@ -80,9 +78,12 @@ def reconciliation_full(akt: dict, order: dict) -> tuple:
                 print('По тарифу {} сверено объектов {}, осталось {}'.format(tp, len(b), len(diff_order_lines)))
                 print('Базовая строка: ', line)
                 print('id - %  - объект')
+                c = 0
                 for id, line_ in enumerate(comp_lines):
-                    if line_[0] > 70:
-                        
+                    if c > 10:
+                        break
+                    if line_[0] > 50:
+                        c += 1
                         print('{} - {} - {}'.format(id, *line_))
                 check = input('Введите номер наиболее подходящего объекта\nили любую букву если нет подходящего варианта: ')
                 if check.isdigit() and int(check) <= len(comp_lines):
