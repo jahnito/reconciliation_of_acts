@@ -108,9 +108,8 @@ def calc_sum_akt(akt: dict, tarifs=None):
         c = len(akt[i])
         s = tarifs[i] * c
         result += round(s, 2)
-        print(f'{i} * {c} = {s}')
+        # print(f'{i} * {c} = {s}')
 
-    print(result)
 
     return result
 
